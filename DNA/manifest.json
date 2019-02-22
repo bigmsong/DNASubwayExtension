@@ -1,0 +1,21 @@
+{
+	"name": "DNA Tracker",
+	"version": "1.0",
+	"description": "Tracks User Inputs",
+	"manifest_version": 2,
+	"permissions": [
+		"tabs",
+        "storage"
+    ],
+	"browser_action": {
+		"default_icon": "extension_black_192x192.png",
+		"default_popup": "data.html"
+	},
+	"content_scripts": [
+    	{
+      		"matches": ["*://*.dnasubway.cyverse.org/*"],
+      		"all_frames": true,
+      		"js": ["clicks.js"]
+    	}
+	]
+}
