@@ -69,7 +69,6 @@ function clickListener(e) {
     		clickList.push(' Typed: ' + document.getElementsByClassName('condition')[temp].value);
     	}
 	}
-	alert(clickedType);
     if(clickedType != 'a' && clickedType != 'input' && clickedType != 'b' && clickedType != 'option' && clickedType != 'textarea' && clickedType != 'label' && clickedType != 'button') {
     	addClick = 'misclick';
     	if(clickedType == 'select') {
