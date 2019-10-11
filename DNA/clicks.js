@@ -1,4 +1,5 @@
 var clickList = new Array();
+var timeStamps = new Array();
 var numOfClicks = 0;
 var clickedType = '';
 var word = '';
@@ -12,6 +13,11 @@ chrome.storage.local.get('num', function(result){
 chrome.storage.local.get('loc', function(result){
 	if(result.loc != null) {
     	clickList = result.loc;
+	}
+});
+chrome.storage.local.get('time', function(result){
+	if(result.time != null) {
+    	timeStamps = result.time;
 	}
 });
 
@@ -35,38 +41,49 @@ function clickListener(e) {
     if(clickList.length > 0) {
     	if(clickList[clickList.length-1] == (' name')) {
     		clickList.push(' Typed: ' + document.getElementById('name').value);
+    		timeStamps.push(Date.now());
     	}
     	if(clickList[clickList.length-1] == (' description')) {
     		clickList.push(' Typed: ' + document.getElementById('description').value);
+    		timeStamps.push(Date.now());
     	}
     	if(clickList[clickList.length-1] == (' ftitle')) {
     		clickList.push(' Typed: ' + document.getElementById('ftitle').value);
+    		timeStamps.push(Date.now());
     	}
     	if(clickList[clickList.length-1] == (' forg')) {
     		clickList.push(' Typed: ' + document.getElementById('forg').value);
+    		timeStamps.push(Date.now());
     	}
     	if(clickList[clickList.length-1] == (' fowner')) {
     		clickList.push(' Typed: ' + document.getElementById('fowner').value);
+    		timeStamps.push(Date.now());
     	}
     	if(clickList[clickList.length-1] == (' quality_threshold')) {
     		clickList.push(' Typed: ' + document.getElementById('quality_threshold').value);
+    		timeStamps.push(Date.now());
     	}
     	if(clickList[clickList.length-1] == (' min_length')) {
     		clickList.push(' Typed: ' + document.getElementById('min_length').value);
+    		timeStamps.push(Date.now());
     	}
     	if(clickList[clickList.length-1] == (' min_quality')) {
     		clickList.push(' Typed: ' + document.getElementById('min_quality').value);
+    		timeStamps.push(Date.now());
     	}
     	if(clickList[clickList.length-1] == (' percent_bases')) {
     		clickList.push(' Typed: ' + document.getElementById('percent_bases').value);
+    		timeStamps.push(Date.now());
     	}
     	if(clickList[clickList.length-1].includes(': sample')) {
     		var temp = rowNum();
     		clickList.push(' Typed: ' + document.getElementsByClassName('sample')[temp].value);
+    		timeStamps.push(Date.now());
     	}
     	if(clickList[clickList.length-1].includes(': condition')) {
     		var temp= rowNum();
     		clickList.push(' Typed: ' + document.getElementsByClassName('condition')[temp].value);
+    		timeStamps.push(Date.now());
     	}
 	}
     if(clickedType != 'a' && clickedType != 'input' && clickedType != 'b' && clickedType != 'option' && clickedType != 'textarea' && clickedType != 'label' && clickedType != 'button') {
@@ -102,13 +119,30 @@ function clickListener(e) {
     		addClick = typeOfElement(e);
 		}
 	}
-	clickList.push(' ' + addClick);
+	clickList.push(addClick);
+	timeStamps.push(Date.now());
 	//comment out next line for stopping the annoying alerts
 	alert(clickList);
 	chrome.storage.local.set({ 'num': numOfClicks }, function(){
 	});
 	chrome.storage.local.set({ 'loc': clickList }, function(){
 	});
+	chrome.storage.local.set({ 'time': timeStamps }, function(){
+	});
+
+	if(clickList.length == timeStamps.length) {
+		var finalList = new Array();
+		var i;
+		for (i = 0; i < clickList.length; i++) {
+			var str1 = '['+timeStamps[i]+'] ';
+			var str2 = clickList[i];
+			finalList.push(str1 + str2)
+		}
+		chrome.runtime.sendMessage(finalList);
+	}
+	else {
+		alert("Error");
+	}
 }
 
 function rowNum() {
