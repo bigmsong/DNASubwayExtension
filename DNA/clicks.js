@@ -1,5 +1,7 @@
 var clickList = new Array();
 var timeStamps = new Array();
+var finalList = new Array();
+var urlList = new Array();
 var numOfClicks = 0;
 var clickedType = '';
 var word = '';
@@ -21,6 +23,12 @@ chrome.storage.local.get('time', function(result){
 	}
 });
 
+chrome.storage.local.get('url', function(result){
+	if(result.url != null) {
+    	urlList = result.url;
+	}
+});
+
 function clickOrigin(e){
     var target = e.target;
     var tag = [];
@@ -33,58 +41,73 @@ document.onclick = clickListener;
 
 function clickListener(e) {
 	var addClick;
-	if(clickList.length > 10) {
-		clickList = new Array();
-	}
     clickedType = clickOrigin(e).tagType;
     numOfClicks++;
     if(clickList.length > 0) {
-    	if(clickList[clickList.length-1] == (' name')) {
-    		clickList.push(' Typed: ' + document.getElementById('name').value);
+    	if(clickList[clickList.length-1] == ('name')) {
+    		clickList.push('Typed:' + document.getElementById('name').value);
     		timeStamps.push(Date.now());
+    		urlList.push(window.location.toString());
     	}
-    	if(clickList[clickList.length-1] == (' description')) {
-    		clickList.push(' Typed: ' + document.getElementById('description').value);
+    	if(clickList[clickList.length-1] == ('description')) {
+    		clickList.push('Typed:' + document.getElementById('description').value);
     		timeStamps.push(Date.now());
+    		urlList.push(window.location.toString());
     	}
-    	if(clickList[clickList.length-1] == (' ftitle')) {
-    		clickList.push(' Typed: ' + document.getElementById('ftitle').value);
+    	if(clickList[clickList.length-1] == ('ftitle')) {
+    		clickList.push('Typed:' + document.getElementById('ftitle').value);
     		timeStamps.push(Date.now());
+    		urlList.push(window.location.toString());
     	}
-    	if(clickList[clickList.length-1] == (' forg')) {
-    		clickList.push(' Typed: ' + document.getElementById('forg').value);
+    	if(clickList[clickList.length-1] == ('forg')) {
+    		clickList.push('Typed:' + document.getElementById('forg').value);
     		timeStamps.push(Date.now());
+    		urlList.push(window.location.toString());
     	}
-    	if(clickList[clickList.length-1] == (' fowner')) {
-    		clickList.push(' Typed: ' + document.getElementById('fowner').value);
+    	if(clickList[clickList.length-1] == ('fowner')) {
+    		clickList.push('Typed:' + document.getElementById('fowner').value);
     		timeStamps.push(Date.now());
+    		urlList.push(window.location.toString());
     	}
-    	if(clickList[clickList.length-1] == (' quality_threshold')) {
-    		clickList.push(' Typed: ' + document.getElementById('quality_threshold').value);
+    	if(clickList[clickList.length-1] == ('quality_threshold')) {
+    		clickList.push('Typed:' + document.getElementById('quality_threshold').value);
     		timeStamps.push(Date.now());
+    		urlList.push(window.location.toString());
     	}
-    	if(clickList[clickList.length-1] == (' min_length')) {
-    		clickList.push(' Typed: ' + document.getElementById('min_length').value);
+    	if(clickList[clickList.length-1] == ('min_length')) {
+    		clickList.push('Typed:' + document.getElementById('min_length').value);
     		timeStamps.push(Date.now());
+    		urlList.push(window.location.toString());
     	}
-    	if(clickList[clickList.length-1] == (' min_quality')) {
-    		clickList.push(' Typed: ' + document.getElementById('min_quality').value);
+    	if(clickList[clickList.length-1] == ('min_quality')) {
+    		clickList.push('Typed:' + document.getElementById('min_quality').value);
     		timeStamps.push(Date.now());
+    		urlList.push(window.location.toString());
     	}
-    	if(clickList[clickList.length-1] == (' percent_bases')) {
-    		clickList.push(' Typed: ' + document.getElementById('percent_bases').value);
+    	if(clickList[clickList.length-1] == ('percent_bases')) {
+    		clickList.push('Typed:' + document.getElementById('percent_bases').value);
     		timeStamps.push(Date.now());
+    		urlList.push(window.location.toString());
     	}
-    	if(clickList[clickList.length-1].includes(': sample')) {
+    	if(clickList[clickList.length-1].includes(':sample')) {
     		var temp = rowNum();
-    		clickList.push(' Typed: ' + document.getElementsByClassName('sample')[temp].value);
+    		clickList.push('Typed:' + document.getElementsByClassName('sample')[temp].value);
     		timeStamps.push(Date.now());
+    		urlList.push(window.location.toString());
     	}
-    	if(clickList[clickList.length-1].includes(': condition')) {
+    	if(clickList[clickList.length-1].includes(':condition')) {
     		var temp= rowNum();
-    		clickList.push(' Typed: ' + document.getElementsByClassName('condition')[temp].value);
+    		clickList.push('Typed:' + document.getElementsByClassName('condition')[temp].value);
     		timeStamps.push(Date.now());
+    		urlList.push(window.location.toString());
     	}
+    	if(clickList[clickList.length-1].includes('notes')) {
+    		var temp= rowNum();
+    		clickList.push('Typed:' + document.getElementsByClassName('notes').value);
+    		timeStamps.push(Date.now());
+    		urlList.push(window.location.toString());
+    	}
+
 	}
     if(clickedType != 'a' && clickedType != 'input' && clickedType != 'b' && clickedType != 'option' && clickedType != 'textarea' && clickedType != 'label' && clickedType != 'button') {
     	addClick = 'misclick';
@@ -110,7 +133,7 @@ function clickListener(e) {
     			addClick = e.target.className;
     			if(addClick == 'sample' || addClick == 'condition') {
     				addClick = e.target.parentNode.parentNode.cells[0].innerText + " and " 
-    				+ e.target.parentNode.parentNode.cells[1].innerText + ": " 
+    				+ e.target.parentNode.parentNode.cells[1].innerText + ":" 
     				+ e.target.className + " - " + e.target.parentNode.parentNode.sectionRowIndex;
     			}
     		}
@@ -121,6 +144,7 @@ function clickListener(e) {
 	}
 	clickList.push(addClick);
 	timeStamps.push(Date.now());
+	urlList.push(window.location.toString());
 	//comment out next line for stopping the annoying alerts
 	alert(clickList);
 	chrome.storage.local.set({ 'num': numOfClicks }, function(){
@@ -129,21 +153,33 @@ function clickListener(e) {
 	});
 	chrome.storage.local.set({ 'time': timeStamps }, function(){
 	});
+	chrome.storage.local.set({ 'url': urlList }, function(){
+	});
 
 	if(clickList.length == timeStamps.length) {
-		var finalList = new Array();
+		finalList = new Array();
 		var i;
 		for (i = 0; i < clickList.length; i++) {
-			var str1 = '['+timeStamps[i]+'] ';
-			var str2 = clickList[i];
-			finalList.push(str1 + str2)
+			var str1 = '[' + timeStamps[i] + ',' + clickList[i] + ',' + urlList[i] + ']';
+			finalList.push(str1);
 		}
-		chrome.runtime.sendMessage(finalList);
 	}
 	else {
+		alert(clickList.length);
+		alert(timeStamps.length);
 		alert("Error");
 	}
+
+
+	chrome.storage.local.set({ 'list': finalList }, function(){
+	});
 }
+
+chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse) {
+	if((msg.from === 'popup')) {
+		chrome.runtime.sendMessage();
+	}
+});
 
 function rowNum() {
 	var string = "";
