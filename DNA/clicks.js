@@ -146,7 +146,7 @@ function clickListener(e) {
 	timeStamps.push(Date.now());
 	urlList.push(window.location.toString());
 	//comment out next line for stopping the annoying alerts
-	alert(clickList);
+	//alert(clickList);
 	chrome.storage.local.set({ 'num': numOfClicks }, function(){
 	});
 	chrome.storage.local.set({ 'loc': clickList }, function(){
